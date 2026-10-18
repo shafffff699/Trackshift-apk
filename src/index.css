@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-display: 'Chakra Petch', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #070913;
+    color: #f8fafc;
+    font-family: var(--font-sans);
+    touch-action: none;
+    overscroll-behavior: none;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Responsive fluid text scaling utilities */
+.text-fluid-xs {
+  font-size: clamp(0.65rem, 1.8vw, 0.75rem);
+  line-height: 1.35;
+}
+
+.text-fluid-sm {
+  font-size: clamp(0.75rem, 2.2vw, 0.875rem);
+  line-height: 1.4;
+}
+
+.text-fluid-base {
+  font-size: clamp(0.825rem, 2.5vw, 1rem);
+  line-height: 1.4;
+}
+
+.text-fluid-lg {
+  font-size: clamp(0.95rem, 3vw, 1.25rem);
+  line-height: 1.3;
+}
+
+.text-fluid-xl {
+  font-size: clamp(1.05rem, 3.6vw, 1.5rem);
+  line-height: 1.25;
+}
+
+.text-fluid-2xl {
+  font-size: clamp(1.25rem, 4.5vw, 1.875rem);
+  line-height: 1.2;
+}
+
+.text-fluid-score {
+  font-size: clamp(1.1rem, 4.2vw, 1.85rem);
+  line-height: 1.15;
+}
+
+.hud-stroke {
+  paint-order: stroke fill;
+  -webkit-text-stroke: 3px #05070f;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+}
+
+.hud-panel {
+  background-color: rgba(8, 12, 24, 0.88);
+  border: 1px solid rgba(6, 182, 212, 0.32);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.hud-panel-amber {
+  background-color: rgba(16, 12, 8, 0.9);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.modal-surface {
+  background-color: #0b1021;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}

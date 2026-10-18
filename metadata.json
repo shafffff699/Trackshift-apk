@@ -1,0 +1,6 @@
+{
+  "name": "TRACKSHIFT: NEON RUN",
+  "description": "Run the rails. Beat the city. A 3D futuristic railway endless-runner game with four power-ups, rotating missions, unlockable couriers and hoverboards, and procedural metro biomes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
