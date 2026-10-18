@@ -33,7 +33,7 @@ export const SubModalOverlay: React.FC<SubModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center p-2.5 sm:p-4 pointer-events-auto overflow-hidden"
+      className="fixed inset-0 z-40 flex items-center justify-center modal-cutout-shell pointer-events-auto overflow-hidden"
       style={{ backgroundColor: 'rgba(5, 8, 18, 0.86)' }}
       role="dialog"
       aria-modal="true"
@@ -43,7 +43,7 @@ export const SubModalOverlay: React.FC<SubModalProps> = ({
       }}
     >
       <div
-        className="modal-surface w-full max-w-2xl rounded-xl p-3.5 sm:p-6 text-slate-100 max-h-[92dvh] min-w-0 overflow-hidden flex flex-col"
+        className="modal-surface w-full max-w-2xl rounded-xl p-3.5 sm:p-6 text-slate-100 max-h-[88dvh] min-w-0 overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Bar: Prominent Back Button + Wallet Readout + Close Button */}
@@ -650,13 +650,13 @@ export const PauseModal: React.FC<PauseModalProps> = ({
 }) => {
   return (
     <div
-      className="fixed inset-0 z-30 flex items-center justify-center p-3 sm:p-4 pointer-events-auto overflow-hidden"
+      className="fixed inset-0 z-30 flex items-center justify-center modal-cutout-shell pointer-events-auto overflow-hidden"
       style={{ backgroundColor: 'rgba(5, 8, 18, 0.82)' }}
       role="dialog"
       aria-modal="true"
       aria-label="Game Paused"
     >
-      <div className="modal-surface w-full max-w-sm max-h-[92dvh] overflow-y-auto overflow-x-hidden min-w-0 rounded-xl p-4 sm:p-6 text-center space-y-4 sm:space-y-5">
+      <div className="modal-surface w-full max-w-sm max-h-[88dvh] overflow-y-auto overflow-x-hidden min-w-0 rounded-xl p-4 sm:p-6 text-center space-y-4 sm:space-y-5">
         <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-3 min-w-0">
           <button
             type="button"
@@ -732,13 +732,13 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
 }) => {
   return (
     <div
-      className="fixed inset-0 z-30 flex items-center justify-center p-3 sm:p-4 pointer-events-auto overflow-hidden"
+      className="fixed inset-0 z-30 flex items-center justify-center modal-cutout-shell pointer-events-auto overflow-hidden"
       style={{ backgroundColor: 'rgba(5, 8, 18, 0.85)' }}
       role="dialog"
       aria-modal="true"
       aria-label="Run Complete"
     >
-      <div className="modal-surface w-full max-w-md max-h-[92dvh] overflow-y-auto overflow-x-hidden min-w-0 rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5">
+      <div className="modal-surface w-full max-w-md max-h-[88dvh] overflow-y-auto overflow-x-hidden min-w-0 rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5">
         <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-3 min-w-0">
           <button
             type="button"

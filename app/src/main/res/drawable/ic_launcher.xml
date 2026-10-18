@@ -2,18 +2,92 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+
+    <!-- Sunny Blue Sky Background -->
     <path
-        android:fillColor="#070913"
-        android:pathData="M0,0h108v108h-108z" />
+        android:fillColor="#0284c7"
+        android:pathData="M0,0h512v512h-512z" />
     <path
-        android:fillColor="#00F5D4"
-        android:pathData="M24,84L44,24L52,24L32,84Z" />
+        android:fillColor="#38bdf8"
+        android:pathData="M0,96h512v256h-512z" />
+
+    <!-- Graffiti Wall Left -->
     <path
-        android:fillColor="#FF2A85"
-        android:pathData="M56,84L76,24L84,24L64,84Z" />
+        android:fillColor="#ec4899"
+        android:pathData="M0,68L158,176L158,318L0,342Z" />
     <path
-        android:fillColor="#FFD166"
-        android:pathData="M34,50L78,50L74,60L30,60Z" />
+        android:fillColor="#facc15"
+        android:pathData="M14,154L24,196L68,204L74,162L56,174L44,148L32,172Z" />
+
+    <!-- Railway Ground & Tracks -->
+    <path
+        android:fillColor="#d97706"
+        android:pathData="M0,336L245,232L355,232L512,340L512,512L0,512Z" />
+    <path
+        android:fillColor="#94a3b8"
+        android:pathData="M6,456L228,244L236,244L26,464Z" />
+    <path
+        android:fillColor="#cbd5e1"
+        android:pathData="M132,512L268,244L276,244L156,512Z" />
+
+    <!-- Blue Commuter Subway Train Right -->
+    <path
+        android:fillColor="#2563eb"
+        android:pathData="M404,136L500,136L500,272L404,272Z" />
+    <path
+        android:fillColor="#facc15"
+        android:pathData="M434,148L470,148L470,159L434,159Z" />
+
+    <!-- Runner White Hoodie & Red Cap -->
+    <path
+        android:fillColor="#f8fafc"
+        android:pathData="M106,154C96,68 172,30 242,52C298,70 306,144 268,206C244,234 148,228 114,192Z" />
+    <path
+        android:fillColor="#fb923c"
+        android:pathData="M156,118C156,86 258,92 264,138C268,184 234,222 198,218C164,214 150,174 156,118Z" />
+    <path
+        android:fillColor="#ef4444"
+        android:pathData="M148,112C156,56 246,52 280,108Z" />
+    <path
+        android:fillColor="#ffffff"
+        android:pathData="M192,62C224,58 258,70 272,104L184,98Z" />
+    <path
+        android:fillColor="#ef4444"
+        android:pathData="M112,188L208,204L188,298L104,274Z" />
+    <path
+        android:fillColor="#1d4ed8"
+        android:pathData="M114,264L174,284L142,380L58,366Z" />
+    <path
+        android:fillColor="#ef4444"
+        android:pathData="M46,362L164,362L164,490L46,490Z" />
+
+    <!-- Yellow Sticker Shield Behind TS -->
+    <path
+        android:fillColor="#fde047"
+        android:pathData="M202,280L310,242L388,200L460,284L436,438L310,468L184,494L202,438L226,330L186,340Z" />
+
+    <!-- Dark Navy 3D Extrusion Base -->
+    <path
+        android:fillColor="#060b19"
+        android:pathData="M194,288L316,248L396,252L452,288L434,436L350,458L200,460L232,322L192,334Z" />
+
+    <!-- Golden Yellow 'T' -->
+    <path
+        android:fillColor="#facc15"
+        android:pathData="M210,282L334,244L322,288L282,300L246,440L206,452L242,312L202,324Z" />
+
+    <!-- Electric Cyan 'S' -->
+    <path
+        android:fillColor="#22d3ee"
+        android:pathData="M378,262L440,284L420,324L368,308L416,348L400,428L284,426L304,382L378,392L324,348L340,268Z" />
+
+    <!-- Glossy Red Map Pin Above T & S -->
+    <path
+        android:fillColor="#ef4444"
+        android:pathData="M350,186C376,186 394,208 394,230C394,256 362,284 350,300C338,284 306,256 306,230C306,208 324,186 350,186Z" />
+    <path
+        android:fillColor="#090e24"
+        android:pathData="M350,214C358,214 364,220 364,228C364,236 358,242 350,242C342,242 336,236 336,228C336,220 342,214 350,214Z" />
 </vector>

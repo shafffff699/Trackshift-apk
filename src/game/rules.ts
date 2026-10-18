@@ -27,6 +27,67 @@ export const SLIDE_DURATION = 0.62;
 export const POWERUP_DURATION = 10.0;
 export const AEGIS_DURATION = 18.0;
 
+export type HapticAction = 'lane' | 'jump' | 'slide';
+
+export const HAPTIC_PATTERNS: Record<HapticAction, number> = {
+  lane: 12,
+  jump: 18,
+  slide: 24,
+};
+
+export function triggerHapticFeedback(
+  action: HapticAction,
+  vibrateFn?: (pattern: number | number[]) => boolean
+): boolean {
+  const pattern = HAPTIC_PATTERNS[action];
+  try {
+    if (vibrateFn) {
+      return vibrateFn(pattern);
+    }
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      return navigator.vibrate(pattern);
+    }
+  } catch {
+    // Ignore vibration errors in restricted browser contexts
+  }
+  return false;
+}
+
+export interface CameraCutoutInsets {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+  centerNotchClearancePx: number;
+}
+
+export function computeCameraCutoutInsets(params: {
+  viewportWidth: number;
+  viewportHeight: number;
+  reportedTop?: number;
+  reportedRight?: number;
+  reportedBottom?: number;
+  reportedLeft?: number;
+}): CameraCutoutInsets {
+  const width = Math.max(1, params.viewportWidth);
+  const height = Math.max(1, params.viewportHeight);
+  const isMobilePortrait = width < 640 && height > width;
+  const isMobileLandscape = height <= 500 && width > height;
+
+  const rawTop = Math.max(0, Number(params.reportedTop) || 0);
+  const rawRight = Math.max(0, Number(params.reportedRight) || 0);
+  const rawBottom = Math.max(0, Number(params.reportedBottom) || 0);
+  const rawLeft = Math.max(0, Number(params.reportedLeft) || 0);
+
+  return {
+    top: isMobilePortrait ? Math.max(rawTop, 26) : rawTop,
+    right: isMobileLandscape ? Math.max(rawRight, 28) : rawRight,
+    bottom: isMobilePortrait || isMobileLandscape ? Math.max(rawBottom, 10) : rawBottom,
+    left: isMobileLandscape ? Math.max(rawLeft, 28) : rawLeft,
+    centerNotchClearancePx: isMobilePortrait ? 44 : 24,
+  };
+}
+
 export const CHARACTERS: CharacterCosmetic[] = [
   {
     id: 'kairo_cyan',

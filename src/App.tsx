@@ -19,7 +19,7 @@ import {
 } from './components/GameModals';
 import { audioManager } from './game/AudioManager';
 import { TrackshiftEngine } from './game/GameEngine';
-import { CHARACTERS, HOVERBOARDS } from './game/rules';
+import { CHARACTERS, HAPTIC_PATTERNS, HapticAction, HOVERBOARDS } from './game/rules';
 import { loadSaveData, writeSaveData } from './game/SaveManager';
 import { GameState, RunStatsSnapshot, SaveData, SubModal } from './game/types';
 
@@ -71,6 +71,16 @@ export default function App() {
     setSaveData(nextSave);
     writeSaveData(nextSave);
     engineRef.current?.updateSaveAndSettings(nextSave);
+  }, []);
+
+  const triggerInputHaptic = useCallback((action: HapticAction) => {
+    try {
+      if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+        navigator.vibrate(HAPTIC_PATTERNS[action]);
+      }
+    } catch {
+      // Ignore vibration errors on unsupported browsers
+    }
   }, []);
 
   const handleStartRun = useCallback(() => {
@@ -266,15 +276,19 @@ export default function App() {
       if (state === 'playing') {
         if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
           e.preventDefault();
+          triggerInputHaptic('lane');
           engineRef.current?.triggerLaneSwitch(-1);
         } else if (e.code === 'ArrowRight' || e.code === 'KeyD') {
           e.preventDefault();
+          triggerInputHaptic('lane');
           engineRef.current?.triggerLaneSwitch(1);
         } else if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'Space') {
           e.preventDefault();
+          triggerInputHaptic('jump');
           engineRef.current?.triggerJump();
         } else if (e.code === 'ArrowDown' || e.code === 'KeyS') {
           e.preventDefault();
+          triggerInputHaptic('slide');
           engineRef.current?.triggerSlide();
         } else if (e.code === 'KeyE' || e.code === 'ShiftLeft') {
           e.preventDefault();
@@ -299,7 +313,7 @@ export default function App() {
       window.removeEventListener('blur', onBlurOrVisibility);
       document.removeEventListener('visibilitychange', onBlurOrVisibility);
     };
-  }, [handlePauseRun, handleResumeRun, handleStartRun, handleToggleMute]);
+  }, [handlePauseRun, handleResumeRun, handleStartRun, handleToggleMute, triggerInputHaptic]);
 
   // Mobile Touch / Pointer swipe gesture handlers on the canvas wrapper
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -326,11 +340,14 @@ export default function App() {
 
     start.consumed = true;
     if (Math.abs(dx) > Math.abs(dy)) {
+      triggerInputHaptic('lane');
       engineRef.current?.triggerLaneSwitch(dx > 0 ? 1 : -1);
     } else {
       if (dy < 0) {
+        triggerInputHaptic('jump');
         engineRef.current?.triggerJump();
       } else {
+        triggerInputHaptic('slide');
         engineRef.current?.triggerSlide();
       }
     }
@@ -368,7 +385,10 @@ export default function App() {
 
       {/* TITLE SCREEN OVERLAY */}
       {gameState === 'title' && (
-        <div className="fixed inset-0 z-20 pointer-events-none flex flex-col justify-between p-3.5 sm:p-8 md:p-10 overflow-hidden max-w-full">
+        <div
+          data-testid="title-overlay"
+          className="fixed inset-0 z-20 pointer-events-none flex flex-col justify-between hud-cutout-shell overflow-hidden max-w-full"
+        >
           {/* Top Zone: Title Lockup in Left/Top Negative Space + Wallet Readout */}
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 min-w-0 max-w-full">
             <div className="pointer-events-auto max-w-md min-w-0 w-full">
@@ -478,14 +498,17 @@ export default function App() {
         </div>
       )}
 
-      {/* PLAYING HUD OVERLAY (>= 85% Unobstructed Viewport, Zero Backdrop-Filter) */}
+      {/* PLAYING HUD OVERLAY (>= 85% Unobstructed Viewport, Zero Backdrop-Filter, Camera Cutout Safe) */}
       {gameState === 'playing' && (
-        <div className="fixed inset-0 z-20 pointer-events-none flex flex-col justify-between p-2.5 sm:p-6 overflow-hidden max-w-full">
-          {/* Top Perimeter Clusters */}
+        <div
+          data-testid="playing-hud-overlay"
+          className="fixed inset-0 z-20 pointer-events-none flex flex-col justify-between hud-cutout-shell overflow-hidden max-w-full"
+        >
+          {/* Top Perimeter Clusters with Center Camera Cutout Clearance */}
           <div className="flex flex-col gap-2 w-full min-w-0">
-            <div className="flex items-start justify-between gap-2 w-full min-w-0">
+            <div className="flex items-start justify-between gap-2.5 sm:gap-4 w-full min-w-0">
               {/* Top-Left Telemetry Cluster: Score, Distance, Multiplier */}
-              <div className="hud-panel px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl flex items-center gap-2.5 sm:gap-4 min-w-0 max-w-[58vw] sm:max-w-none overflow-hidden">
+              <div className="hud-panel px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl flex items-center gap-2 sm:gap-4 min-w-0 max-w-[45vw] sm:max-w-none overflow-hidden">
                 <div className="min-w-0">
                   <div className="text-[10px] font-bold tracking-widest uppercase text-cyan-400 truncate">
                     SCORE{' '}
@@ -531,8 +554,8 @@ export default function App() {
               </div>
 
               {/* Top-Right Currency & Utility Buttons */}
-              <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto shrink-0 min-w-0 max-w-[40vw] sm:max-w-none justify-end">
-                <div className="hud-panel px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl flex items-center gap-1.5 sm:gap-2 font-mono-num text-fluid-xs min-w-0 overflow-hidden">
+              <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto shrink-0 min-w-0 max-w-[52vw] sm:max-w-none justify-end">
+                <div className="hud-panel px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl flex items-center gap-1.5 sm:gap-2 font-mono-num text-fluid-xs shrink-0">
                   <span className="flex items-center gap-1 text-amber-400 font-bold truncate">
                     <CoinSvgIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                     <span ref={coinsElRef} data-testid="hud-coins" className="truncate">
@@ -658,7 +681,10 @@ export default function App() {
                 <button
                   type="button"
                   aria-label="Move Left"
-                  onClick={() => engineRef.current?.triggerLaneSwitch(-1)}
+                  onClick={() => {
+                    triggerInputHaptic('lane');
+                    engineRef.current?.triggerLaneSwitch(-1);
+                  }}
                   className="hud-panel w-11 h-11 sm:w-12 sm:h-12 rounded-xl font-display font-bold text-base sm:text-lg text-white active:scale-95 cursor-pointer"
                 >
                   ◀
@@ -667,7 +693,10 @@ export default function App() {
                   <button
                     type="button"
                     aria-label="Jump"
-                    onClick={() => engineRef.current?.triggerJump()}
+                    onClick={() => {
+                      triggerInputHaptic('jump');
+                      engineRef.current?.triggerJump();
+                    }}
                     className="hud-panel w-11 h-10 sm:w-12 sm:h-11 rounded-xl font-display font-bold text-xs sm:text-sm text-cyan-300 active:scale-95 cursor-pointer"
                   >
                     ▲
@@ -675,7 +704,10 @@ export default function App() {
                   <button
                     type="button"
                     aria-label="Slide"
-                    onClick={() => engineRef.current?.triggerSlide()}
+                    onClick={() => {
+                      triggerInputHaptic('slide');
+                      engineRef.current?.triggerSlide();
+                    }}
                     className="hud-panel w-11 h-10 sm:w-12 sm:h-11 rounded-xl font-display font-bold text-xs sm:text-sm text-amber-300 active:scale-95 cursor-pointer"
                   >
                     ▼
@@ -684,7 +716,10 @@ export default function App() {
                 <button
                   type="button"
                   aria-label="Move Right"
-                  onClick={() => engineRef.current?.triggerLaneSwitch(1)}
+                  onClick={() => {
+                    triggerInputHaptic('lane');
+                    engineRef.current?.triggerLaneSwitch(1);
+                  }}
                   className="hud-panel w-11 h-11 sm:w-12 sm:h-12 rounded-xl font-display font-bold text-base sm:text-lg text-white active:scale-95 cursor-pointer"
                 >
                   ▶

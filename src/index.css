@@ -5,6 +5,14 @@
     --font-display: 'Chakra Petch', sans-serif;
     --font-sans: 'Plus Jakarta Sans', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+    --cutout-top: 0px;
+    --cutout-right: 0px;
+    --cutout-bottom: 0px;
+    --cutout-left: 0px;
+    --safe-top: max(env(safe-area-inset-top, 0px), var(--cutout-top, 0px));
+    --safe-right: max(env(safe-area-inset-right, 0px), var(--cutout-right, 0px));
+    --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--cutout-bottom, 0px));
+    --safe-left: max(env(safe-area-inset-left, 0px), var(--cutout-left, 0px));
   }
 
   * {
@@ -28,6 +36,48 @@
     touch-action: none;
     overscroll-behavior: none;
   }
+}
+
+/* Camera Cutout & Safe-Area Optimized Containers */
+.hud-cutout-shell {
+  padding-top: calc(var(--safe-top, 0px) + 0.625rem);
+  padding-right: calc(var(--safe-right, 0px) + 0.625rem);
+  padding-bottom: calc(var(--safe-bottom, 0px) + 0.625rem);
+  padding-left: calc(var(--safe-left, 0px) + 0.625rem);
+}
+
+@media (max-width: 639px) and (orientation: portrait) {
+  .hud-cutout-shell {
+    padding-top: calc(max(var(--safe-top, 0px), 26px) + 0.375rem);
+    padding-right: calc(var(--safe-right, 0px) + 0.625rem);
+    padding-bottom: calc(max(var(--safe-bottom, 0px), 10px) + 0.5rem);
+    padding-left: calc(var(--safe-left, 0px) + 0.625rem);
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .hud-cutout-shell {
+    padding-top: calc(var(--safe-top, 0px) + 0.5rem);
+    padding-right: calc(max(var(--safe-right, 0px), 28px) + 0.5rem);
+    padding-bottom: calc(max(var(--safe-bottom, 0px), 8px) + 0.375rem);
+    padding-left: calc(max(var(--safe-left, 0px), 28px) + 0.5rem);
+  }
+}
+
+@media (min-width: 640px) {
+  .hud-cutout-shell {
+    padding-top: calc(var(--safe-top, 0px) + 1.5rem);
+    padding-right: calc(var(--safe-right, 0px) + 1.5rem);
+    padding-bottom: calc(var(--safe-bottom, 0px) + 1.5rem);
+    padding-left: calc(var(--safe-left, 0px) + 1.5rem);
+  }
+}
+
+.modal-cutout-shell {
+  padding-top: calc(max(var(--safe-top, 0px), 16px) + 0.5rem);
+  padding-right: calc(var(--safe-right, 0px) + 0.625rem);
+  padding-bottom: calc(max(var(--safe-bottom, 0px), 12px) + 0.5rem);
+  padding-left: calc(var(--safe-left, 0px) + 0.625rem);
 }
 
 .font-display {

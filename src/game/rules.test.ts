@@ -256,3 +256,52 @@ test('shop purchases deduct currency and prevent duplicate charges', () => {
   assert.equal(boardRes.next.coins, 500 - 300);
   assert.equal(boardRes.next.selectedBoard, 'solar_flare');
 });
+
+test('haptic feedback triggers distinct vibration durations for lane switch, jump, and slide', async () => {
+  const { HAPTIC_PATTERNS, triggerHapticFeedback } = await import('./rules.ts');
+  const calls: Array<number | number[]> = [];
+  const mockVibrate = (pattern: number | number[]) => {
+    calls.push(pattern);
+    return true;
+  };
+
+  assert.equal(triggerHapticFeedback('lane', mockVibrate), true);
+  assert.equal(triggerHapticFeedback('jump', mockVibrate), true);
+  assert.equal(triggerHapticFeedback('slide', mockVibrate), true);
+
+  assert.deepEqual(calls, [
+    HAPTIC_PATTERNS.lane,
+    HAPTIC_PATTERNS.jump,
+    HAPTIC_PATTERNS.slide,
+  ]);
+});
+
+test('camera cutout inset calculation enforces safe clearance on portrait and landscape mobile viewports', async () => {
+  const { computeCameraCutoutInsets } = await import('./rules.ts');
+
+  const portraitDefault = computeCameraCutoutInsets({
+    viewportWidth: 390,
+    viewportHeight: 844,
+  });
+  assert.equal(portraitDefault.top, 26);
+  assert.equal(portraitDefault.bottom, 10);
+  assert.equal(portraitDefault.centerNotchClearancePx, 44);
+
+  const portraitDeepCutout = computeCameraCutoutInsets({
+    viewportWidth: 390,
+    viewportHeight: 844,
+    reportedTop: 42,
+    reportedBottom: 24,
+  });
+  assert.equal(portraitDeepCutout.top, 42);
+  assert.equal(portraitDeepCutout.bottom, 24);
+
+  const landscapeCutout = computeCameraCutoutInsets({
+    viewportWidth: 844,
+    viewportHeight: 390,
+  });
+  assert.equal(landscapeCutout.left, 28);
+  assert.equal(landscapeCutout.right, 28);
+});
+
+

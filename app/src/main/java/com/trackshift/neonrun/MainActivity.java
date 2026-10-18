@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.DisplayCutout;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
@@ -21,6 +22,7 @@ import android.webkit.WebViewClient;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends Activity {
@@ -29,6 +31,10 @@ public class MainActivity extends Activity {
     private static final String START_URL = "https://" + VIRTUAL_HOST + "/index.html";
 
     private WebView webView;
+    private int cutoutTopCssPx = 0;
+    private int cutoutRightCssPx = 0;
+    private int cutoutBottomCssPx = 0;
+    private int cutoutLeftCssPx = 0;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -38,14 +44,52 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Window window = getWindow();
         if (window != null) {
-            window.setStatusBarColor(Color.parseColor("#070913"));
-            window.setNavigationBarColor(Color.parseColor("#070913"));
+            window.setStatusBarColor(Color.TRANSPARENT);
+            window.setNavigationBarColor(Color.TRANSPARENT);
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                WindowManager.LayoutParams lp = window.getAttributes();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    lp.layoutInDisplayCutoutMode =
+                            WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
+                } else {
+                    lp.layoutInDisplayCutoutMode =
+                            WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+                }
+                window.setAttributes(lp);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                window.setDecorFitsSystemWindows(false);
+            }
         }
 
         webView = new WebView(this);
         webView.setBackgroundColor(Color.parseColor("#070913"));
         webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            webView.setOnApplyWindowInsetsListener((v, insets) -> {
+                DisplayCutout cutout = insets.getDisplayCutout();
+                float density = getResources().getDisplayMetrics().density;
+                if (density <= 0f) {
+                    density = 1f;
+                }
+                if (cutout != null) {
+                    cutoutTopCssPx = Math.round(cutout.getSafeInsetTop() / density);
+                    cutoutRightCssPx = Math.round(cutout.getSafeInsetRight() / density);
+                    cutoutBottomCssPx = Math.round(cutout.getSafeInsetBottom() / density);
+                    cutoutLeftCssPx = Math.round(cutout.getSafeInsetLeft() / density);
+                } else {
+                    cutoutTopCssPx = 0;
+                    cutoutRightCssPx = 0;
+                    cutoutBottomCssPx = 0;
+                    cutoutLeftCssPx = 0;
+                }
+                syncCutoutInsetsToWebView();
+                return insets;
+            });
+        }
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -63,6 +107,12 @@ public class MainActivity extends Activity {
 
         webView.setWebChromeClient(new WebChromeClient());
         webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                syncCutoutInsetsToWebView();
+            }
+
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();
@@ -97,6 +147,23 @@ public class MainActivity extends Activity {
         setContentView(webView);
         hideSystemBars();
         webView.loadUrl(START_URL);
+    }
+
+    private void syncCutoutInsetsToWebView() {
+        if (webView == null) return;
+        String js = String.format(
+                Locale.US,
+                "(function(){var r=document.documentElement;if(r){r.style.setProperty('--cutout-top','%dpx');r.style.setProperty('--cutout-right','%dpx');r.style.setProperty('--cutout-bottom','%dpx');r.style.setProperty('--cutout-left','%dpx');}})();",
+                cutoutTopCssPx,
+                cutoutRightCssPx,
+                cutoutBottomCssPx,
+                cutoutLeftCssPx
+        );
+        webView.post(() -> {
+            if (webView != null) {
+                webView.evaluateJavascript(js, null);
+            }
+        });
     }
 
     private String resolveMimeType(String path) {

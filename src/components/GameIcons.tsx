@@ -18,6 +18,21 @@ export function TrackshiftTitleSvg({ className = 'w-full max-w-md' }: { classNam
           <stop offset="0%" stopColor="#fbbf24" />
           <stop offset="100%" stopColor="#f97316" />
         </linearGradient>
+        <linearGradient id="ts-logo-t" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#fef08a" />
+          <stop offset="45%" stopColor="#facc15" />
+          <stop offset="100%" stopColor="#ea580c" />
+        </linearGradient>
+        <linearGradient id="ts-logo-s" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#a5f3fc" />
+          <stop offset="45%" stopColor="#22d3ee" />
+          <stop offset="100%" stopColor="#1d4ed8" />
+        </linearGradient>
+        <linearGradient id="ts-logo-pin" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ff6b6b" />
+          <stop offset="50%" stopColor="#ef4444" />
+          <stop offset="100%" stopColor="#b91c1c" />
+        </linearGradient>
       </defs>
 
       {/* Outer Angled Metro Plaque Silhouette */}
@@ -35,22 +50,63 @@ export function TrackshiftTitleSvg({ className = 'w-full max-w-md' }: { classNam
       />
 
       {/* Top & Bottom Speed Rail Accents */}
-      <rect x="32" y="18" width="180" height="5" fill="url(#ts-rail-cyan)" />
+      <rect x="116" y="18" width="160" height="5" fill="url(#ts-rail-cyan)" />
       <rect x="290" y="105" width="205" height="5" fill="url(#ts-rail-amber)" />
 
-      {/* Emblem Icon Left: Stylized Twin Tracks + Bolt */}
-      <g transform="translate(34, 34)">
-        <polygon points="10,56 26,4 36,4 20,56" fill="#06b6d4" />
-        <polygon points="32,56 48,4 58,4 42,56" fill="#f97316" />
-        <rect x="6" y="16" width="54" height="5" fill="#e2e8f0" />
-        <rect x="2" y="36" width="54" height="5" fill="#e2e8f0" />
+      {/* App Logo Badge Left: Rounded App Icon + Stylized 3D 'TS' & Red Map Pin */}
+      <g transform="translate(22, 20)">
+        <rect
+          x="0"
+          y="0"
+          width="86"
+          height="86"
+          rx="18"
+          fill="#0284c7"
+          stroke="#fde047"
+          strokeWidth="2.5"
+        />
+        {/* Sunny Sky & Graffiti Accent inside Badge */}
+        <path d="M2,18 L34,42 L34,84 L2,84 Z" fill="#ec4899" opacity="0.85" />
+        <path d="M2,58 L84,58 L84,84 L2,84 Z" fill="#d97706" opacity="0.9" />
+        {/* Yellow Sticker Aura */}
+        <polygon
+          points="12,34 44,22 58,10 78,34 72,74 44,80 14,80 20,44"
+          fill="#fde047"
+        />
+        {/* Dark Navy 3D Extrusion Base */}
+        <polygon
+          points="14,36 46,24 62,26 76,36 70,72 44,78 16,78 22,44"
+          fill="#060b19"
+        />
+        {/* Golden 'T' */}
+        <polygon
+          points="18,35 46,25 43,36 34,39 26,72 17,75 25,42 16,45"
+          fill="url(#ts-logo-t)"
+        />
+        {/* Cyan 'S' */}
+        <path
+          d="M56,30 L72,36 L67,46 L53,42 C50,41 49,44 52,46 L66,52 C73,56 72,68 61,72 C50,76 39,75 33,71 L38,60 C44,64 52,65 56,63 C59,61 58,58 55,57 L43,52 C36,48 37,36 47,32 C50,30 53,30 56,30 Z"
+          fill="url(#ts-logo-s)"
+        />
+        {/* Glossy Red Map Pin Above T & S */}
+        <g transform="translate(50, 24) rotate(-8)">
+          <path
+            d="M0,-16 C8,-16 13,-10 13,-3 C13,5 4,12 0,17 C-4,12 -13,5 -13,-3 C-13,-10 -8,-16 0,-16 Z"
+            fill="#090e24"
+          />
+          <path
+            d="M0,-14 C6.5,-14 11,-8.5 11,-3 C11,3.5 3,10.5 0,14.5 C-3,10.5 -11,3.5 -11,-3 C-11,-8.5 -6.5,-14 0,-14 Z"
+            fill="url(#ts-logo-pin)"
+          />
+          <circle cx="0" cy="-3.5" r="3.8" fill="#090e24" />
+        </g>
       </g>
 
       {/* Primary Lockup Lettering */}
       <text
-        x="106"
+        x="118"
         y="68"
-        textLength="368"
+        textLength="360"
         lengthAdjust="spacingAndGlyphs"
         fill="#f8fafc"
         fontFamily="'Chakra Petch', sans-serif"
@@ -64,7 +120,7 @@ export function TrackshiftTitleSvg({ className = 'w-full max-w-md' }: { classNam
 
       {/* Subtitle Lockup */}
       <text
-        x="108"
+        x="120"
         y="96"
         fill="#22d3ee"
         fontFamily="'Chakra Petch', sans-serif"
@@ -77,9 +133,9 @@ export function TrackshiftTitleSvg({ className = 'w-full max-w-md' }: { classNam
 
       {/* Tagline Accent Right */}
       <text
-        x="246"
+        x="252"
         y="95"
-        textLength="238"
+        textLength="232"
         lengthAdjust="spacingAndGlyphs"
         fill="#fbbf24"
         fontFamily="'JetBrains Mono', monospace"
